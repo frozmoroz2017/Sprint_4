@@ -1,28 +1,26 @@
-    package ru.practicum.pages;
+package ru.practicum.pages;
 
-    import org.openqa.selenium.By;
-    import org.openqa.selenium.WebDriver;
-    import org.openqa.selenium.support.ui.ExpectedConditions;
-    import org.openqa.selenium.support.ui.WebDriverWait;
+import org.openqa.selenium.By;
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.WebDriverWait;
 
-    import java.time.Duration;
+import java.time.Duration;
 
-    import static ru.practicum.util.EnvConfig.EXPLICITY_TIMEOUT;
+import static ru.practicum.util.EnvConfig.EXPLICITY_TIMEOUT;
 
-    public class StatusPage {
-        private final WebDriver driver;
-        private final By img = By.cssSelector("img[alt='Not found']");
+public class StatusPage {
+    private final WebDriver driver;
+    private final WebDriverWait wait;
+    private final By errorImage = By.cssSelector("img[alt='Not found']");
 
-        public StatusPage(WebDriver driver) {
-            this.driver = driver;
-        }
-
-        public void CheckErrorImage() {
-            new WebDriverWait(driver, Duration.ofSeconds(EXPLICITY_TIMEOUT))
-                    .until(ExpectedConditions.visibilityOfElementLocated(img));
-
-            if (!driver.findElement(img).isDisplayed()) {
-                throw new RuntimeException("Error image is not displayed");
-            }
-        }
+    public StatusPage(WebDriver driver) {
+        this.driver = driver;
+        this.wait = new WebDriverWait(driver, Duration.ofSeconds(EXPLICITY_TIMEOUT));
     }
+
+    public boolean checkErrorImage() {
+        wait.until(ExpectedConditions.visibilityOfElementLocated(errorImage));
+        return driver.findElement(errorImage).isDisplayed();
+    }
+}
